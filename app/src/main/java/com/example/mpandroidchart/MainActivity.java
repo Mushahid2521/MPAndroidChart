@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
@@ -24,6 +25,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -33,6 +36,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +64,29 @@ public class MainActivity extends AppCompatActivity {
         String[] productNames = {"Furniture", "Cosmetic", "Food", "Ticket"};
         Integer[] productColors = {Color.DKGRAY, Color.RED, Color.GREEN, Color.BLUE};
 
+        ArrayList<Entry> product_entries = new ArrayList<>();
 
+        for (int i=0; i<productNames.length; i++) {
+            product_entries.add(new Entry(productSold[i], i+1));
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(product_entries, "Pie_Chart");
+        pieDataSet.setColors(Arrays.asList(productColors));
+        pieDataSet.setSliceSpace(5);
+        pieDataSet.setSelectionShift(5f);
+
+
+        PieData pieData = new PieData(productNames);
+        pieData.addDataSet(pieDataSet);
+
+
+        Legend legend = productChart.getLegend();
+
+
+        productChart.setData(pieData);
+        productChart.getLegend().setEnabled(false);
+        //productChart.animateY(500);
+        productChart.invalidate();
 
     }
 
