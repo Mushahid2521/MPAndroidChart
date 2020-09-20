@@ -6,14 +6,16 @@ import android.widget.TextView;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.utils.MPPointF;
 
 public class CustomMarker extends MarkerView {
 
     private TextView tvContent;
 
-    public CustomMarker (Context context, int layoutResource) {
+    public CustomMarker(Context context, int layoutResource) {
         super(context, layoutResource);
-        // this markerview only displays a textview
+
+        // find your layout components
         tvContent = (TextView) findViewById(R.id.tvContent);
     }
 
@@ -21,18 +23,22 @@ public class CustomMarker extends MarkerView {
 // content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-        tvContent.setText("" + e.getVal()); // set the entry-value as the display text
+
+        tvContent.setText("" + (int)e.getY());
+
+        // this will perform necessary layouting
+        super.refreshContent(e, highlight);
     }
 
-    @Override
-    public int getXOffset(float xpos) {
-        // this will center the marker-view horizontally
-        return -(getWidth() / 2);
-    }
+    private MPPointF mOffset;
 
     @Override
-    public int getYOffset(float ypos) {
-        // this will cause the marker-view to be above the selected value
-        return -getHeight();
-    }
-}
+    public MPPointF getOffset() {
+
+        if(mOffset == null) {
+            // center the marker horizontally and vertically
+            mOffset = new MPPointF(-(getWidth() / 2), -getHeight());
+        }
+
+        return mOffset;
+    }}
